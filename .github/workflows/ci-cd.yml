@@ -85,7 +85,7 @@ jobs:
 
       - name: Replace image in deployment.yaml
         run: |
-          sed -i "s|image: .*|image: $IMAGE_TAG|g" k8s/deployment.yaml
+          sed -i "s|image: .*|image: $IMAGE_TAG|g" deploy_producer.yaml
 
       - name: Apply Kubernetes manifests
         run: |
