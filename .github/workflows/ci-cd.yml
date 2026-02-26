@@ -72,5 +72,6 @@ jobs:
       - name: Wait for rollout
         run: |
           export KUBECONFIG=$PWD/kubeconfig
-          kubectl rollout status deployment/goldprice
+          kubectl rollout status deployment/sjc-producer -n kafka
+
 
