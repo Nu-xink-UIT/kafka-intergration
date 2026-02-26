@@ -83,7 +83,7 @@ jobs:
       - name: Set IMAGE_TAG
         run: echo "IMAGE_TAG=ghcr.io/${{ github.repository }}:${{ github.sha }}" >> $GITHUB_ENV
 
-      - name: Replace image in deployment.yaml
+      - name: Replace image in deploy_producer.yaml
         run: |
           sed -i "s|image: .*|image: $IMAGE_TAG|g" deploy_producer.yaml
 
