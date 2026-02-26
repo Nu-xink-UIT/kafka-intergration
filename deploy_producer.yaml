@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sjc-producer
+  namespace: kafka
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sjc-producer
+  template:
+    metadata:
+      labels:
+        app: sjc-producer
+    spec:
+      terminationGracePeriodSeconds: 30
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - name: sjc
+          image: ghcr.io/tuyetminh14/python-producer:latest
+          imagePullPolicy: Always
+          env:
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: "my-cluster-1-kafka-bootstrap:9092"
+            - name: KAFKA_TOPIC
+              value: "sjc"

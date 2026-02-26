@@ -1,0 +1,7 @@
+venv
+.venv
+
+src/sjc/__pycache__
+src/sjc/client/__pycache__
+src/sjc/core/__pycache__
+src/sjc/service/__pycache__

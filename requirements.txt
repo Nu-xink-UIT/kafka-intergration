@@ -1,0 +1,16 @@
+aiohappyeyeballs==2.6.1
+aiohttp==3.13.3
+aiokafka==0.13.0
+aiosignal==1.4.0
+async-timeout==5.0.1
+attrs==25.4.0
+certifi==2026.2.25
+frozenlist==1.8.0
+greenlet==3.3.2
+idna==3.11
+multidict==6.7.1
+packaging==26.0
+propcache==0.4.1
+pyee==13.0.1
+typing_extensions==4.15.0
+yarl==1.22.0
