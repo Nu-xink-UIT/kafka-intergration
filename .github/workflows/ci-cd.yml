@@ -47,20 +47,17 @@ jobs:
           echo "image_tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
       
           echo "Using image: $IMAGE_TAG"
-
-  deploy-to-k8s:
-    runs-on: self-hosted
-    needs: build-and-push
-
-    steps:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: ${{ needs.build-and-push.outputs.image_tag }}
+          tags: ${{ env.IMAGE_TAG }}
+  deploy-to-k8s:
+    runs-on: self-hosted
+    needs: build-and-push
 
-
+    steps:
       - name: Setup kubectl
         uses: azure/setup-kubectl@v4
 
