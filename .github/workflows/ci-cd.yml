@@ -8,7 +8,8 @@ on:
 jobs:
   build-and-push:
     runs-on: self-hosted
-
+    outputs:
+      image_tag: ${{ steps.set_tag.outputs.image_tag }}
     permissions:
       contents: read
       packages: write
@@ -53,6 +54,7 @@ jobs:
           context: .
           push: true
           tags: ${{ env.IMAGE_TAG }}
+        
   deploy-to-k8s:
     runs-on: self-hosted
     needs: build-and-push
