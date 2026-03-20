@@ -11,7 +11,7 @@ class BinanceStreamingService:
         self.running = False
 
     async def start(self):
-        """Bắt đầu dịch vụ streaming, lắng nghe dữ liệu từ Binance và gửi đến Kafka"""
+        """Bắt đầu dịch vụ streaming, nghe dữ liệu từ Binance và gửi đến Kafka"""
         self.running = True
         logger.info("Binance Streaming Service đã bắt đầu.")
 
