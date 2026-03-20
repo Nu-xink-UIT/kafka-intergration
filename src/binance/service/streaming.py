@@ -28,7 +28,5 @@ class BinanceStreamingService:
                 logger.error(f"Đã xảy ra lỗi khi gửi dữ liệu từ Binance đến Kafka: {e}")
 
     def stop(self):
-        """Dừng dịch vụ streaming"""
         self.running = False
         logger.info("Binance Streaming Service đã dừng.")
-        
