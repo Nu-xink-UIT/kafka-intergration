@@ -1,0 +1,50 @@
+name: Build and Push Binance Producer 
+
+on:
+  push:
+    branches:
+      - feat/binance  # Kích hoạt khi bạn push lên nhánh này
+    paths:
+      - 'src/binance/**' # Chỉ build khi có thay đổi trong module binance
+
+env:
+  REGISTRY: ghcr.io
+  # Format: ghcr.io/<tên-org>/<tên-image>
+  IMAGE_NAME: ${{ github.repository_owner }}/binance-producer
+
+jobs:
+  build-and-push:
+    runs-on: self-hosted # Sử dụng GitRunner bạn đã setup trong Org
+    permissions:
+      contents: read
+      packages: write # Cần quyền này để ghi vào Registry
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          # GitHub Actions tự động có sẵn GITHUB_TOKEN để login vào GHCR của Org
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=sha,format=short
+            latest
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ id.meta.outputs.tags }}
+          labels: ${{ id.meta.outputs.labels }}
