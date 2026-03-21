@@ -54,7 +54,7 @@ jobs:
           tags: ${{ env.IMAGE_TAG }}
 
 
-deploy-to-k8s:
+  deploy-to-k8s:
     runs-on: self-hosted
     needs: build-and-push # Phải đợi build xong mới deploy
     steps:
