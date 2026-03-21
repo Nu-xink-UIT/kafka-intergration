@@ -31,13 +31,13 @@ jobs:
 
       - name: Load kubeconfig
         run: |
-          # Sử dụng printf để tránh lỗi định dạng Base64
+          # Giải mã secret KUBE_CONFIG đã lưu
           printf "%s" "${{ secrets.KUBE_CONFIG }}" | base64 -d > kubeconfig
           echo "KUBECONFIG=$PWD/kubeconfig" >> $GITHUB_ENV
 
       - name: Apply Kubernetes manifests
         run: |
-          # Giờ đây lệnh kubectl đã sẵn sàng
+          # Sau bước Setup ở trên, lệnh kubectl chắc chắn sẽ tồn tại
           kubectl apply -f deploy_producer.yaml -n kafka
 
       - name: Login to GHCR
