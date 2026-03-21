@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: binance-producer 
+  name: binance-producer
   namespace: kafka
 spec:
   replicas: 1
@@ -17,7 +17,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: binance
-          image: TEMP_IMAGE_WILL_BE_REPLACED_BY_SED
+          image: ghcr.io/${{ github.repository }}/binance-producer:latest
           env:
             - name: KAFKA_BOOTSTRAP_SERVERS
               value: "my-cluster-1-kafka-bootstrap:9092"
