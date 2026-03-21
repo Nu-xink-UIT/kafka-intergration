@@ -24,22 +24,6 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v4
 
-      - name: Setup kubectl
-        uses: azure/setup-kubectl@v4
-        with:
-          version: 'latest'
-
-      - name: Load kubeconfig
-        run: |
-          # Giải mã secret KUBE_CONFIG đã lưu
-          printf "%s" "${{ secrets.KUBE_CONFIG }}" | base64 -d > kubeconfig
-          echo "KUBECONFIG=$PWD/kubeconfig" >> $GITHUB_ENV
-
-      - name: Apply Kubernetes manifests
-        run: |
-          # Sau bước Setup ở trên, lệnh kubectl chắc chắn sẽ tồn tại
-          kubectl apply -f deploy_producer.yaml -n kafka
-
       - name: Login to GHCR
         uses: docker/login-action@v3
         with:
@@ -70,37 +54,38 @@ jobs:
           tags: ${{ env.IMAGE_TAG }}
 
 
-  deploy-to-k8s:
+deploy-to-k8s:
     runs-on: self-hosted
-    needs: build-and-push
-
+    needs: build-and-push # Phải đợi build xong mới deploy
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
 
+      - name: Setup kubectl
+        id: install-kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: 'latest'
+
       - name: Load kubeconfig
         run: |
-          # Dùng printf để tránh lỗi "invalid input" của base64
           printf "%s" "${{ secrets.KUBE_CONFIG }}" | base64 -d > kubeconfig
           echo "KUBECONFIG=$PWD/kubeconfig" >> $GITHUB_ENV
 
       - name: Replace image in deploy_producer.yaml
         run: |
-          # Kiểm tra xem file có tồn tại không trước khi chạy sed
-          if [ ! -f "deploy_producer.yaml" ]; then
-            echo "Lỗi: Không tìm thấy file deploy_producer.yaml trong thư mục gốc!"
-            ls -R
-            exit 1
-          fi
-          # Thay thế image bằng tag mới nhất vừa build
+          # Cập nhật tag image mới nhất vào file manifest
           sed -i "s|image: .*|image: ${{ needs.build-and-push.outputs.image_tag }}|g" deploy_producer.yaml
 
       - name: Apply Kubernetes manifests
         run: |
-          # Sử dụng file đã được cập nhật image
-          kubectl --kubeconfig=$KUBECONFIG apply -f deploy_producer.yaml -n kafka
+          $KUBECTL_PATH apply -f deploy_producer.yaml -n kafka
+        env:
+          KUBECTL_PATH: ${{ steps.install-kubectl.outputs.kubectl-path }}
 
       - name: Wait for rollout
         run: |
-          # Đảm bảo tên deployment trong file yaml của bạn là binance-producer
-          kubectl --kubeconfig=$KUBECONFIG rollout status deployment/binance-producer -n kafka
+          # Đảm bảo tên deployment trong deploy_producer.yaml là binance-producer
+          $KUBECTL_PATH rollout status deployment/binance-producer -n kafka
+        env:
+          KUBECTL_PATH: ${{ steps.install-kubectl.outputs.kubectl-path }}
