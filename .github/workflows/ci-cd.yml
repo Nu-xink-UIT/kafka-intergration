@@ -8,6 +8,7 @@ on:
       - 'requirements.txt'
       - 'dockerfile'
       - 'deploy_producer.yaml'
+      - ci-cd.yml
   workflow_dispatch:
 
 jobs:
