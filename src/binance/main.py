@@ -25,12 +25,17 @@ async def main():
     for sig in (signal.SIGINT, signal.SIGTERM):
         loop.add_signal_handler(sig, shutdown)
 
+
     # Chạy service
     task = asyncio.create_task(streaming_service.start())
+    
+    stop_task = asyncio.create_task(stop_event.wait())
 
     # Chờ cho đến khi có tín hiệu dừng HOẶC task bị lỗi
-    pending = [task, stop_event.wait()]
-    done, pending = await asyncio.wait(pending, return_when=asyncio.FIRST_COMPLETED)
+    # Truyền các Task vào danh sách
+    pending_list = [task, stop_task]
+    done, pending = await asyncio.wait(pending_list, return_when=asyncio.FIRST_COMPLETED)
+
 
     logger.info("Đang dọn dẹp tài nguyên...")
     streaming_service.stop()
