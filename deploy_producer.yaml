@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vcb-producer
+  labels:
+    app: vcb-producer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vcb-producer
+  template:
+    metadata:
+      labels:
+        app: vcb-producer
+    spec:
+      containers:
+      - name: vcb-producer
+        image: ghcr.io/${{ github.repository }}/vcb-producer:latest # Thay bằng image của bạn
+        env:
+        - name: KAFKA_BOOTSTRAP_SERVERS
+          value: "kafka-service:9092"
+        - name: VCB_TOPIC
+          value: "vcb_exchange_rates"
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+          requests:
+            cpu: "200m"
+            memory: "256Mi"
