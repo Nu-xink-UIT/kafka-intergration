@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: vcb-producer
+  namespace: kafka
   labels:
     app: vcb-producer
 spec:
@@ -14,9 +15,12 @@ spec:
       labels:
         app: vcb-producer
     spec:
+      imagePullSecrets:
+        - name: ghcr-auth
       containers:
       - name: vcb-producer
-        image: ghcr.io/${{ github.repository }}/vcb-producer:latest 
+
+        image: ghcr.io/nu-xink-uit/kafka-intergration/vcb-producer:latest
         env:
         - name: KAFKA_BOOTSTRAP_SERVERS
           value: "kafka-service:9092"
