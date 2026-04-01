@@ -1,5 +1,5 @@
 import asyncio
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from src.vcb.core.config import settings
 from src.vcb.core.logger import get_logger
 
@@ -14,7 +14,8 @@ class VCBPollingService:
     def get_next_run_time(self):
         """Tính toán thơi fgian chạy tiếp theo dựa trên cấu hình"""
 
-        now = datetime.now()
+        vietnam_tz = timezone(timedelta(hours=7))
+        now = datetime.now(vietnam_tz)
         upcoming_times = []
 
         for hour, minunte in settings.SCHEDULED_TIMES:
