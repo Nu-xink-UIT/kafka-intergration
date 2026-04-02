@@ -12,17 +12,20 @@ class GoldPriceClient:
             cafile=certifi.where()
         )
     async def fetch(self, url:str) -> dict:
-        logger.info("Begin to fetch data from: {url}")
+        logger.info(f"Begin to fetch data from: {url}")
         try:
-            async with aiohttp.ClientSession() as session:
+            headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+            }
+            async with aiohttp.ClientSession(headers=headers) as session:
                 async with session.get(url, ssl=self.ssl_context, timeout=15) as response:
                     response.raise_for_status()
                     data = await response.json(content_type=None)
                     logger.info("Successfully fetched data")
                     return data
         except aiohttp.ClientError as e:
-            logger.error("Connection error when calling API: ", e)
+            logger.error(f"Connection error when calling API: {e}")
             raise
         except Exception as e:
-            logger.error("Error during API calling: ", e)
+            logger.error(f"Error during API calling: {e}")
             raise
