@@ -15,16 +15,24 @@ async def main():
 
     client = GoldPriceClient()
     producer = KafkaProducerClient(bootstrap_servers=settings.KAFKA_BOOTSTRAP_SERVER)
+
     service = GoldPricePollingService(client=client, producer=producer)
 
+    stop_even = asyncio.Event()
     loop = asyncio.get_running_loop() # gracefull shutdown
+    def shutdown():
+        stop_even.set()
 
     for sig in (signal.SIGINT, signal.SIGTERM):
         loop.add_signal_handler(sig, lambda: service.stop())
 
     try:
         await producer.start() # connect to Kafka before polling
-        await service.start()
+        polling_task = asyncio.create_task(service.start())
+
+        await stop_even.wait()
+        await polling_task
+
     except Exception as e:
         logger.error(f"System Error: {e}", exc_info=True)
     finally:

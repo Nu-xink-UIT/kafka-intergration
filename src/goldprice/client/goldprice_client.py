@@ -6,13 +6,12 @@ import logging
 logger = logging.getLogger(__name__)
 class GoldPriceClient:
 
-    def __init__(self, url:str):
-        self.url = url
+    def __init__(self):
         # Thiết lập SSL để đảm bảo kết nối HTTPS an toàn
         self.ssl_context = ssl.create_default_context(
             cafile=certifi.where()
         )
-    async def fetch(self) -> dict:
+    async def fetch(self, url:str) -> dict:
         logger.info("Begin to fetch data from: {self.url}")
         try:
             async with aiohttp.ClientSession() as session:
