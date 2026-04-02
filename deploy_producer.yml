@@ -1,0 +1,58 @@
+apiVersion: kafka.strimzi.io/v1
+kind: KafkaTopic
+metadata:
+  name: goldprice.rates.raw
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: my-cluster-1
+spec:
+  partition: 3
+  replicas: 2
+  config:
+    retention.ms: 604800000
+    segment.bytes: 1073741824
+---
+apiVersion: kafka.strimzi.io/v1
+kind: KafkaTopic
+metadata:
+  name: goldprice.performance.raw
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: my-cluster-1
+spec:
+  partition: 3
+  replicas: 2
+  config:
+    retention.ms: 604800000
+    segment.bytes: 1073741824
+
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: goldprice-producer
+  namespace: kafka
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: goldprice-producer
+  template:
+    metadata:
+      labels:
+        app: goldprice-producer
+    spec:
+      terminationGracePeriodSeconds: 30
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - name: goldprice
+          image: ghcr.io/${{ github.repository }}/goldprice-producer:v1
+          env:
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: "my-cluster-1-kafka-bootstrap:9092"
+            - name: TOPIC_RATES
+              value: "goldprice.rates.raw"
+            - name: TOPIC_PERFORMANCE
+              value: "goldprice.performance.raw"
