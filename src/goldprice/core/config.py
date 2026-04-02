@@ -3,7 +3,7 @@ from datetime import datetime
 import pytz
 
 class Settings:
-    KAFKA_BOOTSTRAP_SERVER = os.getenv('KAFKA_BOOTSTRAP_SERVERS'', ''localhost:9092')
+    KAFKA_BOOTSTRAP_SERVER = os.getenv('KAFKA_BOOTSTRAP_SERVERS', 'localhost:9092')
 
     # topic list
     TOPIC_RATES = 'goldprice.rates.raw'

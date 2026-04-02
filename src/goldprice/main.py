@@ -36,7 +36,8 @@ async def main():
     except Exception as e:
         logger.error(f"System Error: {e}", exc_info=True)
     finally:
-        await service.stop()
+        service.stop()
+        await producer.stop()
         logger.info("GoldPrice Producer Stopped")
 
 
