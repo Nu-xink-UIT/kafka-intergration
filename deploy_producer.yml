@@ -48,7 +48,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: goldprice
-          image: ghcr.io/ngocanhhh05/goldprice-producer:latest
+          image: ghcr.io/${{ github.repository }}/goldprice-producer:latest
           env:
             - name: KAFKA_BOOTSTRAP_SERVERS
               value: "my-cluster-1-kafka-bootstrap:9092"
