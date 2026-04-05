@@ -20,6 +20,6 @@ spec:
           image: ghcr.io/${{ github.repository }}/binance-producer:latest
           env:
             - name: KAFKA_BOOTSTRAP_SERVERS
-              value: "my-cluster-1-kafka-bootstrap:9092"
+              value: "kafka-cluster-kafka-bootstrap:9092"
             - name: BINANCE_TOPIC
               value: "binance.raw"
