@@ -23,7 +23,7 @@ spec:
         image: ghcr.io/nu-xink-uit/kafka-intergration/vcb-producer:latest
         env:
         - name: KAFKA_BOOTSTRAP_SERVERS
-          value: "my-cluster-1-kafka-bootstrap:9092"
+          value: "kafka-cluster-kafka-bootstrap:9092"
         - name: VCB_TOPIC
           value: "vcb_exchange_rates"
         resources:
