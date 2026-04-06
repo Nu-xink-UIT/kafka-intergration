@@ -51,7 +51,7 @@ spec:
           image: ghcr.io/${{ github.repository }}/goldprice-producer:latest
           env:
             - name: KAFKA_BOOTSTRAP_SERVERS
-              value: "my-cluster-1-kafka-bootstrap:9092"
+              value: "kafka-cluster-kafka-bootstrap:9092"
             - name: TOPIC_RATES
               value: "goldprice.rates.raw"
             - name: TOPIC_PERFORMANCE

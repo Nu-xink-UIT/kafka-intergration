@@ -3,6 +3,12 @@ name: CI
 on:
     push:
         branches: [ "feat/goldprice" ]
+        paths:
+          - "src/goldprice/**"
+          - "Dockerfile"
+          - "requirments.txt"
+          - ".github/workflows/ci-cd.yml"
+          - "deploy_producer.yml"
     workflow_dispatch:
 
 jobs:
