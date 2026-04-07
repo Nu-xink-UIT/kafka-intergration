@@ -35,12 +35,12 @@ class GoldPollingService:
                     continue
 
                 tasks = []
-                if self.last_seen_date != latest_date:
+                if self.last_seen_date == latest_date:
                     logger.info(f"304: Gold price is not modified since {latest_date}")
                 else:
                     for record in records:
                         payload = {
-                            "fetched_at": datetime.datetime.utcnow().isformat(),
+                            "fetched_at": datetime.datetime.utcnow().isoformat(),
                             "latestDate": latest_date,
                             **record
                         }
@@ -58,7 +58,6 @@ class GoldPollingService:
 
                     self.last_seen_date = latest_date
                     logger.info(f"Sent {len(records)} records to Kafka. New update: {latest_date}")
-                    await asyncio.sleep(60*60)
 
             except Exception:
                 logger.exception("Polling error")
