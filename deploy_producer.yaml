@@ -1,3 +1,18 @@
+apiVersion: kakfka.strimzi.io/v1
+kind: KafkaTopic
+metadata:
+  name: sjc.raw
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: my-cluster-1
+spec:
+  partitions: 3
+  replicas: 2
+  config:
+    retention.ms: 604800000
+    segment.bytes: 1073741824
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18,10 +33,10 @@ spec:
         - name: ghcr-secret
       containers:
         - name: sjc
-          image: ghcr.io/tuyetminh14/python-producer:latest
+          image: ghcr.io/${{github.repository}}/sjc-producer:latest
           imagePullPolicy: Always
           env:
             - name: KAFKA_BOOTSTRAP_SERVERS
-              value: "my-cluster-1-kafka-bootstrap:9092"
+              value: "kafka-cluster-kafka-bootstrap:9092"
             - name: KAFKA_TOPIC
-              value: "sjc"
+              value: "sjc.raw"
