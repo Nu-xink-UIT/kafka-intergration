@@ -2,4 +2,3 @@ aiohttp
 aiokafka
 certifi
 aiosignal
-pytz
