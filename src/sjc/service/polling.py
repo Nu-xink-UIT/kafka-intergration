@@ -58,6 +58,7 @@ class GoldPollingService:
 
                     self.last_seen_date = latest_date
                     logger.info(f"Sent {len(records)} records to Kafka. New update: {latest_date}")
+                    await asyncio.sleep(60*60)
 
             except Exception:
                 logger.exception("Polling error")
