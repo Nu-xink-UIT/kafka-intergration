@@ -1,4 +1,6 @@
 import asyncio
+import datetime
+from time import timezone
 from src.binance.core.logger import get_logger
 
 logger = get_logger(__name__)
@@ -19,6 +21,7 @@ class BinanceStreamingService:
             if not self.running:
                 break
             try:
+                data["fetched_at"] = datetime.now(timezone.utc).isoformat()
                 key = data.get("s", "unknown")
                 await self.producer.send(
                     topic = self.topic, key=key,
