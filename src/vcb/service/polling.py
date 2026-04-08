@@ -43,32 +43,40 @@ class VCBPollingService:
             logger.info(f"Tiếp theo sẽ chạy vào {next_run_time.strftime('%Y-%m-%d %H:%M:%S')} (sau {wait_seconds:.2f} giây)")
 
             try:
-                await asyncio.sleep(wait_seconds)
-            except asyncio.CancelledError:
-                logger.info("VCB Polling Service đã được dừng")
-                break
-
-            if not self.running:
-                break
-
-            try:
                 response = await self.client.fetch()
                 if response and "ExrateList" in response:
-                    # lấy dữ liệu chính
-                    data = response["ExrateList"]
+                    raw_data = response["ExrateList"]
 
-                    #1. Thêm metadata
+                    # 1. Trích xuất Metadata chung
                     fetched_at = datetime.now().isoformat()
-                    data["fetched_at"] = fetched_at
+                    date_time = raw_data.get("DateTime")
+                    source = raw_data.get("Source")
 
-                    # 2. Gửi dữ liệu vào kafka
-                    await self.producer.send(
-                        topic=settings.KAFKA_TOPIC,
-                        key=fetched_at,
-                        value=data
-                    )
+                    # Lấy danh sách tỷ giá (nếu không có thì trả về list rỗng)
+                    exrates = raw_data.get("Exrate", [])
 
-                    logger.info(f"Đã gửi dữ liệu vào Kafka tại {fetched_at}")
+                    # 2. Lặp qua từng đồng tiền để flatten và làm sạch tên cột
+                    for rate in exrates:
+                        flat_record = {
+                            "fetched_at": fetched_at,
+                            "DateTime": date_time,
+                            "Source": source,
+                            # Bỏ chữ '@' và dùng .strip() để xóa khoảng trắng thừa ở tên
+                            "CurrencyCode": rate.get("@CurrencyCode"),
+                            "CurrencyName": rate.get("@CurrencyName", "").strip(),
+                            "Buy": rate.get("@Buy"),
+                            "Transfer": rate.get("@Transfer"),
+                            "Sell": rate.get("@Sell")
+                        }
+
+                        # 3. Gửi từng record vào Kafka
+                        await self.producer.send(
+                            topic=settings.KAFKA_TOPIC,
+                            key=f"{fetched_at}_{flat_record['CurrencyCode']}",
+                            value=flat_record
+                        )
+
+                    logger.info(f"Đã trải phẳng và gửi {len(exrates)} bản ghi vào Kafka tại {fetched_at}")
 
                 else:
                     logger.warning("Dữ liệu API trả về lỗi format hoặc rỗng")
