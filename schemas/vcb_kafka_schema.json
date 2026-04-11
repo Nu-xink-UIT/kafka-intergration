@@ -1,0 +1,15 @@
+{
+    "type": "struct",
+    "name": "VCBExchangeRateRecord",
+    "optional": false,
+    "fields": [
+        {"field": "fetched_at", "type": "string", "optional": true},
+        {"field": "DateTime", "type": "string", "optional": true},
+        {"field": "Source", "type": "string", "optional": true},
+        {"field": "CurrencyCode", "type": "string", "optional": true},
+        {"field": "CurrencyName", "type": "string", "optional": true},
+        {"field": "Buy", "type": "string", "optional": true},
+        {"field": "Transfer", "type": "string", "optional": true},
+        {"field": "Sell", "type": "string", "optional": true}
+    ]
+}

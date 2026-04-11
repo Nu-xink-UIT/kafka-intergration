@@ -3,23 +3,10 @@ from datetime import datetime, timedelta, timezone
 from src.vcb.core.config import settings
 from src.vcb.core.logger import get_logger
 
-logger = get_logger(__name__)
+# BƯỚC 1: IMPORT HỆ THỐNG KIỂM DUYỆT TỪ THƯ MỤC SCHEMAS
+from schemas.vcb_schema import validate_vcb_data, KAFKA_VCB_SCHEMA
 
-VCB_SCHEMA = {
-    "type": "struct",
-    "name": "VCBExchangeRateRecord",
-    "optional": False,
-    "fields": [
-        {"field": "fetched_at", "type": "string", "optional": True},
-        {"field": "DateTime", "type": "string", "optional": True},
-        {"field": "Source", "type": "string", "optional": True},
-        {"field": "CurrencyCode", "type": "string", "optional": True},
-        {"field": "CurrencyName", "type": "string", "optional": True},
-        {"field": "Buy", "type": "string", "optional": True},
-        {"field": "Transfer", "type": "string", "optional": True},
-        {"field": "Sell", "type": "string", "optional": True}
-    ]
-}
+logger = get_logger(__name__)
 
 class VCBPollingService:
     def __init__(self, client, producer):
@@ -48,7 +35,7 @@ class VCBPollingService:
 
     async def start(self):
         """Bắt đầu polling"""
-        logger.info("Bắt đầu VCB Polling Service (Chế độ Schema/Parquet)")
+        logger.info("Bắt đầu VCB Polling Service (Chế độ Pydantic Validation & Parquet)")
         self.running = True
 
         while self.running:
@@ -75,10 +62,11 @@ class VCBPollingService:
                     date_time = raw_data.get("DateTime")
                     source = raw_data.get("Source")
 
-                    # Lấy danh sách tỷ giá (nếu không có thì trả về list rỗng)
+                    # Lấy danh sách tỷ giá
                     exrates = raw_data.get("Exrate", [])
+                    valid_count = 0 # Biến đếm số lượng data hợp lệ
 
-                    # 2. Lặp qua từng đồng tiền để flatten và làm sạch tên cột
+                    # 2. Lặp qua từng đồng tiền để flatten và KIỂM DUYỆT
                     for rate in exrates:
                         flat_record = {
                             "fetched_at": fetched_at,
@@ -92,20 +80,29 @@ class VCBPollingService:
                             "Sell": rate.get("@Sell")
                         }
 
-                        # 3. ĐÓNG GÓI SCHEMA VÀ PAYLOAD
+                        # BƯỚC 2: ĐƯA DATA QUA "MÀNG LỌC" PYDANTIC
+                        clean_data = validate_vcb_data(flat_record)
+
+                        # BƯỚC 3: NẾU DỮ LIỆU RÁC (BỊ HÀM TRẢ VỀ NONE) -> BỎ QUA KHÔNG GỬI
+                        if not clean_data:
+                            continue
+
+                        valid_count += 1
+
+                        # BƯỚC 4: ĐÓNG GÓI SCHEMA VÀ PAYLOAD (Sử dụng Schema đọc từ file JSON)
                         parquet_ready_message = {
-                            "schema": VCB_SCHEMA,
-                            "payload": flat_record
+                            "schema": KAFKA_VCB_SCHEMA,
+                            "payload": clean_data
                         }
 
-                        # 4. Gửi kiện hàng hoàn chỉnh vào Kafka
+                        # 5. Gửi kiện hàng hoàn chỉnh vào Kafka
                         await self.producer.send(
                             topic=settings.KAFKA_TOPIC,
-                            key=f"{fetched_at}_{flat_record['CurrencyCode']}",
+                            key=f"{fetched_at}_{clean_data['CurrencyCode']}",
                             value=parquet_ready_message
                         )
 
-                    logger.info(f"Đã trải phẳng và gửi {len(exrates)} bản ghi Parquet-ready vào Kafka tại {fetched_at}")
+                    logger.info(f"Đã validate và gửi {valid_count}/{len(exrates)} bản ghi hợp lệ vào Kafka tại {fetched_at}")
 
                 else:
                     logger.warning("Dữ liệu API trả về lỗi format hoặc rỗng")

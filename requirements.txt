@@ -2,3 +2,4 @@ aiohttp==3.13.3
 certifi==2026.2.25
 xmltodict
 aiokafka==0.13.0
+pydantic
