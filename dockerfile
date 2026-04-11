@@ -20,4 +20,4 @@ COPY . .
 ENV PYTHONPATH=/app
 
 # Chạy ứng dụng
-CMD ["python", "src/vcb/main.py"]
+CMD ["python", "-m", "src.vcb.main"]
