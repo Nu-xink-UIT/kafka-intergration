@@ -2,40 +2,9 @@ import asyncio
 from datetime import datetime, timezone
 from src.binance.core.logger import get_logger
 
+from schemas.binance_schema import validate_binance_data, KAFKA_BINANCE_SCHEMA
+
 logger = get_logger(__name__)
-
-
-BINANCE_SCHEMA = {
-    "type": "struct",
-    "name": "BinanceRecord",
-    "optional": False,
-    "fields": [
-        {"field": "fetched_at", "type": "string", "optional": True},
-        {"field": "e", "type": "string", "optional": True},
-        {"field": "E", "type": "int64", "optional": True},
-        {"field": "s", "type": "string", "optional": True},
-        {"field": "p", "type": "string", "optional": True},
-        {"field": "P", "type": "string", "optional": True},
-        {"field": "w", "type": "string", "optional": True},
-        {"field": "x", "type": "string", "optional": True},
-        {"field": "c", "type": "string", "optional": True},
-        {"field": "Q", "type": "string", "optional": True},
-        {"field": "b", "type": "string", "optional": True},
-        {"field": "B", "type": "string", "optional": True},
-        {"field": "a", "type": "string", "optional": True},
-        {"field": "A", "type": "string", "optional": True},
-        {"field": "o", "type": "string", "optional": True},
-        {"field": "h", "type": "string", "optional": True},
-        {"field": "l", "type": "string", "optional": True},
-        {"field": "v", "type": "string", "optional": True},
-        {"field": "q", "type": "string", "optional": True},
-        {"field": "O", "type": "int64", "optional": True},
-        {"field": "C", "type": "int64", "optional": True},
-        {"field": "F", "type": "int64", "optional": True},
-        {"field": "L", "type": "int64", "optional": True},
-        {"field": "n", "type": "int64", "optional": True}
-    ]
-}
 
 class BinanceStreamingService:
     def __init__(self, client, producer, topic: str):
@@ -47,7 +16,7 @@ class BinanceStreamingService:
     async def start(self):
         """Bắt đầu dịch vụ streaming, nghe dữ liệu từ Binance"""
         self.running = True
-        logger.info("Binance Streaming Service đã bắt đầu.")
+        logger.info("Binance Streaming Service đã bắt đầu (Chế độ Pydantic & Parquet).")
 
         async for data in self.client.listen():
             if not self.running:
@@ -56,16 +25,23 @@ class BinanceStreamingService:
                 # 1. Thêm metadata thời gian lấy dữ liệu
                 data["fetched_at"] = datetime.now(timezone.utc).isoformat()
 
-                # Lấy key là tên đồng coin
-                message_key = data.get("s", "unknown")
+                # BƯỚC 2: ĐƯA DATA QUA PYDANTIC
+                clean_data = validate_binance_data(data)
 
-                # 2. ĐÓNG GÓI DỮ LIỆU 
+                # BƯỚC 3: BỎ QUA NẾU LÀ DỮ LIỆU RÁC
+                if not clean_data:
+                    continue
+
+                # Lấy key là tên đồng coin từ dữ liệu đã được làm sạch
+                message_key = clean_data.get("s", "unknown")
+
+                # BƯỚC 4: ĐÓNG GÓI SCHEMA VÀ PAYLOAD
                 parquet_ready_message = {
-                    "schema": BINANCE_SCHEMA,
-                    "payload": data
+                    "schema": KAFKA_BINANCE_SCHEMA,
+                    "payload": clean_data
                 }
 
-                # 3. Gửi kiện hàng hoàn chỉnh vào Kafka
+                # 5. Gửi vào Kafka
                 await self.producer.send(
                     topic=self.topic,
                     key=message_key,

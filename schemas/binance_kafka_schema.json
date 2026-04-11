@@ -1,0 +1,31 @@
+{
+    "type": "struct",
+    "name": "BinanceRecord",
+    "optional": false,
+    "fields": [
+        {"field": "fetched_at", "type": "string", "optional": true},
+        {"field": "e", "type": "string", "optional": true},
+        {"field": "E", "type": "int64", "optional": true},
+        {"field": "s", "type": "string", "optional": true},
+        {"field": "p", "type": "string", "optional": true},
+        {"field": "P", "type": "string", "optional": true},
+        {"field": "w", "type": "string", "optional": true},
+        {"field": "x", "type": "string", "optional": true},
+        {"field": "c", "type": "string", "optional": true},
+        {"field": "Q", "type": "string", "optional": true},
+        {"field": "b", "type": "string", "optional": true},
+        {"field": "B", "type": "string", "optional": true},
+        {"field": "a", "type": "string", "optional": true},
+        {"field": "A", "type": "string", "optional": true},
+        {"field": "o", "type": "string", "optional": true},
+        {"field": "h", "type": "string", "optional": true},
+        {"field": "l", "type": "string", "optional": true},
+        {"field": "v", "type": "string", "optional": true},
+        {"field": "q", "type": "string", "optional": true},
+        {"field": "O", "type": "int64", "optional": true},
+        {"field": "C", "type": "int64", "optional": true},
+        {"field": "F", "type": "int64", "optional": true},
+        {"field": "L", "type": "int64", "optional": true},
+        {"field": "n", "type": "int64", "optional": true}
+    ]
+}
