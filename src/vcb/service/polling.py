@@ -3,7 +3,6 @@ from datetime import datetime, timedelta, timezone
 from src.vcb.core.config import settings
 from src.vcb.core.logger import get_logger
 
-# BƯỚC 1: IMPORT HỆ THỐNG KIỂM DUYỆT TỪ THƯ MỤC SCHEMAS
 from schemas.vcb_schema import validate_vcb_data, KAFKA_VCB_SCHEMA
 
 logger = get_logger(__name__)
@@ -57,16 +56,15 @@ class VCBPollingService:
                 if response and "ExrateList" in response:
                     raw_data = response["ExrateList"]
 
-                    # 1. Trích xuất Metadata chung
+                    # Trích xuất Metadata chung
                     fetched_at = datetime.now(timezone.utc).isoformat()
                     date_time = raw_data.get("DateTime")
                     source = raw_data.get("Source")
 
                     # Lấy danh sách tỷ giá
                     exrates = raw_data.get("Exrate", [])
-                    valid_count = 0 # Biến đếm số lượng data hợp lệ
+                    valid_count = 0
 
-                    # 2. Lặp qua từng đồng tiền để flatten và KIỂM DUYỆT
                     for rate in exrates:
                         flat_record = {
                             "fetched_at": fetched_at,
@@ -80,22 +78,19 @@ class VCBPollingService:
                             "Sell": rate.get("@Sell")
                         }
 
-                        # BƯỚC 2: ĐƯA DATA QUA "MÀNG LỌC" PYDANTIC
                         clean_data = validate_vcb_data(flat_record)
-
-                        # BƯỚC 3: NẾU DỮ LIỆU RÁC (BỊ HÀM TRẢ VỀ NONE) -> BỎ QUA KHÔNG GỬI
                         if not clean_data:
                             continue
 
                         valid_count += 1
 
-                        # BƯỚC 4: ĐÓNG GÓI SCHEMA VÀ PAYLOAD (Sử dụng Schema đọc từ file JSON)
+
                         parquet_ready_message = {
                             "schema": KAFKA_VCB_SCHEMA,
                             "payload": clean_data
                         }
 
-                        # 5. Gửi kiện hàng hoàn chỉnh vào Kafka
+
                         await self.producer.send(
                             topic=settings.KAFKA_TOPIC,
                             key=f"{fetched_at}_{clean_data['CurrencyCode']}",
