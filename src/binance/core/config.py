@@ -1,5 +1,7 @@
 import os
+from dotenv import load_dotenv
 
+load_dotenv()
 class Settings:
     KAFKA_BOOTSTRAP_SERVERS = os.getenv('KAFKA_BOOTSTRAP_SERVERS', 'localhost:9092')
     BINANCE_WS_URL= os.getenv('BINANCE_WS_URL', 'wss://stream.binance.com:9443/ws/paxgusdt@ticker')
