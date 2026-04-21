@@ -1,7 +1,10 @@
 import asyncio
+import datetime
+
 from sjc.core.config import settings
 from sjc.core.logger import get_logger
-import datetime
+from sjc.core.schemas import SJCRecord
+
 
 logger = get_logger(__name__)
 
@@ -39,20 +42,24 @@ class GoldPollingService:
                     logger.info(f"304: Gold price is not modified since {latest_date}")
                 else:
                     for record in records:
-                        payload = {
-                            "fetched_at": datetime.datetime.utcnow().isoformat(),
-                            "latestDate": latest_date,
-                            **record
-                        }
-
-
-                        tasks.append(
-                            self.producer.send(
-                                topic=settings.KAFKA_TOPIC,
-                                key=str(record.get("Id")),
-                                value=payload,
+                        try:
+                            data = SJCRecord(
+                                fetched_at =  datetime.datetime.utcnow().isoformat(),
+                                latestDate =  latest_date,
+                                **record
                             )
-                        )
+                            payload = data.model_dump()
+
+
+                            tasks.append(
+                                self.producer.send(
+                                    topic=settings.KAFKA_TOPIC,
+                                    key=str(data.Id),
+                                    value=payload,
+                                )
+                            )
+                        except Exception as e:
+                            logger.error(f"Message with incorrect schema: {e}")
 
                     await asyncio.gather(*tasks)
 
