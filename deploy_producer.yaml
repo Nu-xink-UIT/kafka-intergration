@@ -14,7 +14,7 @@ spec:
         app: binance-producer
     spec:
       imagePullSecrets:
-        - name: ghcr-secret
+        - name: github-registry-secret
       containers:
         - name: binance
           image: ghcr.io/${{ github.repository }}/binance-producer:latest
