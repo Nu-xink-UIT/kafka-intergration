@@ -16,7 +16,7 @@ spec:
         app: vcb-producer
     spec:
       imagePullSecrets:
-        - name: ghcr-auth
+        - name: github-registry-secret
       containers:
       - name: vcb-producer
 
