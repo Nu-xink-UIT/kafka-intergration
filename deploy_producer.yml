@@ -30,7 +30,7 @@ spec:
     spec:
       terminationGracePeriodSeconds: 30
       imagePullSecrets:
-        - name: ghcr-secret
+        - name: github-registry-secret  
       containers:
         - name: goldprice
           image: ghcr.io/${{ github.repository }}/goldprice-producer:latest

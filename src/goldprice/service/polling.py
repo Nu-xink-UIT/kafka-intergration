@@ -2,6 +2,7 @@ import datetime
 import asyncio
 from goldprice.core.config import settings
 from goldprice.core.logger import get_logger
+from goldprice.core.schemas import GoldPriceRecod
 
 logger = get_logger(__name__)
 
@@ -20,12 +21,18 @@ class GoldPricePollingService:
             if not data or not data.get("items"):
                 logger.warning(f"Currency code: {curr} - API returned empty list")
                 return False
-
-            payload = {
-                "fetched_at": datetime.datetime.utcnow().isoformat(),
-                **data
-                }
-            await self.producer.send(topic=topic, key=curr, value=payload)
+            try:
+                raw_payload = {
+                    "fetched_at": datetime.datetime.utcnow().isoformat(),
+                    **data
+                    }
+                # Force data into schema for validation
+                validated_payload = GoldPriceRecod(**raw_payload)
+                # model_dump() transform object Pydantic into dictionary for Kafka
+                final_payload = validated_payload.model_dump()
+                await self.producer.send(topic=topic, key=curr, value=final_payload)
+            except Exception as e:
+                logger.error(f"Schema validation failed for {curr}: {e}")
             return True
 
     async def poll_rates(self, currencies: list, interval: int):

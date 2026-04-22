@@ -3,3 +3,4 @@ aiokafka
 certifi
 aiosignal
 pytz
+pydantic
