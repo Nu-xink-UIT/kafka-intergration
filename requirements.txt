@@ -14,3 +14,4 @@ propcache==0.4.1
 pyee==13.0.1
 typing_extensions==4.15.0
 yarl==1.22.0
+pydantic
