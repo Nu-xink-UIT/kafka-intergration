@@ -64,6 +64,8 @@ class VCBPollingService:
 
                     # Lấy danh sách tỷ giá
                     exrates = raw_data.get("Exrate", [])
+                    if isinstance(exrates, dict):
+                        exrates = [exrates]
                     valid_count = 0
 
                     for rate in exrates:
