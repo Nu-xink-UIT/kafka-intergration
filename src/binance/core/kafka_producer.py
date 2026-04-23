@@ -15,7 +15,9 @@ class KafkaProducerClient:
     async def start(self):
         """Khởi tạo kết nối đến Kafka"""
         self.producer = AIOKafkaProducer(bootstrap_servers=self.bootstrap_servers,
-        retry_backoff_ms=500)
+        retry_backoff_ms=500,
+        acks='all')
+
 
         try:
             await self.producer.start()
