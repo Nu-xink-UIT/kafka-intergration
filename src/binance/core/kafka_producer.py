@@ -32,7 +32,6 @@ class KafkaProducerClient:
     async def send(self, topic: str, key: str, value: dict):
         if not self.producer:
             raise Exception("Kafka Producer chưa được khởi tạo. Vui lòng gọi start() trước khi gửi dữ liệu.")
-            return
         try:
             payload = json.dumps(value).encode('utf-8')
             message_key = key.encode('utf-8') if key else None
