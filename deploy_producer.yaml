@@ -34,7 +34,6 @@ spec:
         - name: github-registry-secret
       containers:
         - name: vcb-producer
-          # Đã cập nhật dùng biến repository động
           image: ghcr.io/${{ github.repository }}/vcb-producer:latest
           imagePullPolicy: Always
           env:
