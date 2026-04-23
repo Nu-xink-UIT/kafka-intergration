@@ -7,7 +7,8 @@ class KafkaProducerClient:
     def __init__(self, bootstrap_servers: str):
         self.bootstrap_servers = bootstrap_servers
         self.producer = AIOKafkaProducer(
-            bootstrap_servers=self.bootstrap_servers
+            bootstrap_servers=self.bootstrap_servers,
+            acks='all'
         )
 
     async def start(self):

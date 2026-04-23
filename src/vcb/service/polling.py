@@ -1,5 +1,6 @@
 import asyncio
 from datetime import datetime, timedelta, timezone
+from zoneinfo import ZoneInfo
 from src.vcb.core.config import settings
 from src.vcb.core.logger import get_logger
 
