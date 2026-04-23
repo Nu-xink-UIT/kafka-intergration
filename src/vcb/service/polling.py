@@ -20,8 +20,8 @@ class VCBPollingService:
         now = datetime.now(vietnam_tz)
         upcoming_times = []
 
-        for hour, minunte in settings.SCHEDULED_TIMES:
-            scheduled_time = now.replace(hour=hour, minute=minunte, second=0, microsecond=0)
+        for hour, minute in settings.SCHEDULED_TIMES:
+            scheduled_time = now.replace(hour=hour, minute=minute, second=0, microsecond=0)
             if scheduled_time > now:
                 upcoming_times.append(scheduled_time)
 
