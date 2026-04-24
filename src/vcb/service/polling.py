@@ -88,16 +88,10 @@ class VCBPollingService:
                         valid_count += 1
 
 
-                        parquet_ready_message = {
-                            "schema": KAFKA_VCB_SCHEMA,
-                            "payload": clean_data
-                        }
-
-
                         await self.producer.send(
                             topic=settings.KAFKA_TOPIC,
                             key=f"{fetched_at}_{clean_data['CurrencyCode']}",
-                            value=parquet_ready_message
+                            value=clean_data
                         )
 
                     logger.info(f"Đã validate và gửi {valid_count}/{len(exrates)} bản ghi hợp lệ vào Kafka tại {fetched_at}")
