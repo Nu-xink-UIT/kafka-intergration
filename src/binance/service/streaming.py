@@ -35,17 +35,12 @@ class BinanceStreamingService:
                 # Lấy key là tên đồng coin từ dữ liệu đã được làm sạch
                 message_key = clean_data.get("s", "unknown")
 
-                # BƯỚC 4: ĐÓNG GÓI SCHEMA VÀ PAYLOAD
-                parquet_ready_message = {
-                    "schema": KAFKA_BINANCE_SCHEMA,
-                    "payload": clean_data
-                }
 
-                # 5. Gửi vào Kafka
+                # 4. Gửi vào Kafka
                 await self.producer.send(
                     topic=self.topic,
                     key=message_key,
-                    value=parquet_ready_message
+                    value=clean_data
                 )
 
             except Exception as e:
