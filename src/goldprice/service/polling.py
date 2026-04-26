@@ -22,7 +22,7 @@ class GoldPricePollingService:
                 logger.warning(f"Currency code: {curr} - API returned empty list")
                 return False
             try:
-                items_data = data.get['items'][0]
+                items_data = data.get('items')[0]
 
                 raw_payload = {
                     "fetched_at": datetime.datetime.utcnow().isoformat(),
@@ -36,9 +36,10 @@ class GoldPricePollingService:
                 # model_dump() transform object Pydantic into dictionary for Kafka
                 final_payload = validated_payload.model_dump()
                 await self.producer.send(topic=topic, key=curr, value=final_payload)
+                return True
             except Exception as e:
                 logger.error(f"Schema validation failed for {curr}: {e}")
-            return True
+                return False
 
     async def poll_rates(self, currencies: list, interval: int):
         while self.running:
