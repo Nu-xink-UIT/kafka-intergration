@@ -22,14 +22,15 @@ class GoldPricePollingService:
                 logger.warning(f"Currency code: {curr} - API returned empty list")
                 return False
             try:
-                common_info ={
+                items_data = data.get['items'][0]
+
+                raw_payload = {
                     "fetched_at": datetime.datetime.utcnow().isoformat(),
-                    "ts": data.get['ts'],
-                    "tsj": data.get['tsj'],
-                    "date": data.get['date'],
-                }
-                for item in data.get('items', []):
-                    raw_payload = {**common_info, **item}
+                    "ts": data.get("ts"),
+                    "tsj": data.get("tsj"),
+                    "date": data.get("date"),
+                    **items_data
+                    }
                 # Force data into schema for validation
                 validated_payload = GoldPriceRecord(**raw_payload)
                 # model_dump() transform object Pydantic into dictionary for Kafka
