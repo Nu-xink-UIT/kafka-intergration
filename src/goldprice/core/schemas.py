@@ -1,8 +1,9 @@
-from pydantic import BaseModel, Field, field_validator
-from datetime import datetime
-from typing import List
-
-class GoldItem(BaseModel):
+from pydantic import BaseModel
+class GoldPriceRecord(BaseModel):
+    fetched_at: str
+    ts: int
+    tsj: int
+    date: str
     curr: str
     xauPrice: float
     xagPrice: float
@@ -12,11 +13,3 @@ class GoldItem(BaseModel):
     pcXag: float
     xauClose: float
     xagClose: float
-
-
-class GoldPriceRecod(BaseModel):
-    fetched_at: str
-    ts: int
-    tsj: int
-    date: str
-    items: List[GoldItem]

@@ -2,7 +2,7 @@ import datetime
 import asyncio
 from goldprice.core.config import settings
 from goldprice.core.logger import get_logger
-from goldprice.core.schemas import GoldPriceRecod
+from goldprice.core.schemas import GoldPriceRecord
 
 logger = get_logger(__name__)
 
@@ -22,12 +22,16 @@ class GoldPricePollingService:
                 logger.warning(f"Currency code: {curr} - API returned empty list")
                 return False
             try:
-                raw_payload = {
+                common_info ={
                     "fetched_at": datetime.datetime.utcnow().isoformat(),
-                    **data
-                    }
+                    "ts": data.get['ts'],
+                    "tsj": data.get['tsj'],
+                    "date": data.get['date'],
+                }
+                for item in data.get('items', []):
+                    raw_payload = {**common_info, **item}
                 # Force data into schema for validation
-                validated_payload = GoldPriceRecod(**raw_payload)
+                validated_payload = GoldPriceRecord(**raw_payload)
                 # model_dump() transform object Pydantic into dictionary for Kafka
                 final_payload = validated_payload.model_dump()
                 await self.producer.send(topic=topic, key=curr, value=final_payload)
