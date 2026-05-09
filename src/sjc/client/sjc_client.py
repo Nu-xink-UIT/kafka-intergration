@@ -18,7 +18,7 @@ class GoldPriceClient:
         }
 
     async def fetch(self) -> dict:
-        async with aiohttp.ClientSession(headers=self.header) as session:
+        async with aiohttp.ClientSession(headers=self.header, trust_env=True) as session:
             async with session.get(self.url, ssl=self.ssl_context) as response:
                 response.raise_for_status()
                 return await response.json(content_type=None)
