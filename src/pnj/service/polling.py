@@ -72,7 +72,7 @@ class GoldPollingService:
                                 )
                             )
                             self.last_update_tracker[tracker_key] = updated_at
-                            current_id =+ 1
+                            current_id += 1
                         except Exception as e:
                             logger.error(f'Error validating record:{branch_name}_{gold_name}: {e}')
                 if tasks:
