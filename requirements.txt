@@ -15,5 +15,5 @@ pyee==13.0.1
 typing_extensions==4.15.0
 yarl==1.22.0
 pydantic
-aiohttp-socks==0.8.4
+aiohttp-socks>=0.9.3
 

@@ -2,28 +2,27 @@ import aiohttp
 import ssl
 import certifi
 import os
-from aiohttp_socks import ProxyConnector
+from aiohttp_socks import ProxyConnector #
 
 class GoldPriceClient:
-
     def __init__(self, url: str):
         self.url = url
-        self.ssl_context = ssl.create_default_context(
-            cafile=certifi.where()
-        )
+        self.ssl_context = ssl.create_default_context(cafile=certifi.where())
         self.header = {
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
             'Accept': 'application/json, text/plain, */*',
             'Origin': 'https://sjc.com.vn',
             'Referer': 'https://sjc.com.vn'
         }
+
     async def fetch(self) -> dict:
         proxy_url = os.getenv("HTTP_PROXY", "socks5h://127.0.0.1:4000")
 
         connector = ProxyConnector.from_url(proxy_url)
+
         async with aiohttp.ClientSession(headers=self.header, connector=connector) as session:
             try:
-                await session.get("https://sjc.com.vn", ssl=self.ssl_context)
+                await session.get("https://sjc.com.vn", ssl=self.ssl_context, timeout=10)
             except Exception as e:
                 print(f"Lỗi khi mồi cookie: {e}")
 

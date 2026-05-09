@@ -36,6 +36,7 @@ spec:
       containers:
         - name: sjc
           image: ghcr.io/${{github.repository}}/sjc-producer:latest
+          no-cache: true
           imagePullPolicy: Always
           env:
             - name: KAFKA_BOOTSTRAP_SERVERS
