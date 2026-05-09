@@ -9,4 +9,4 @@ COPY src/ ./src/
 
 ENV PYTHONPATH=/app/src
 
-CMD ["python", "-m", "sjc.main"]
+CMD ["python", "-m", "pnj.main"]
