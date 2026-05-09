@@ -20,6 +20,6 @@ class KafkaProducerClient:
         await self.producer.send_and_wait(
             topic,
             json.dumps(value).encode(),
-            # key=key.encode()
-            key=key
+            key=str(key).encode()
+
         )
