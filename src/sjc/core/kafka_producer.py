@@ -22,3 +22,5 @@ class KafkaProducerClient:
             json.dumps(value).encode(),
             key=key.encode()
         )
+    async def flush(self):
+        await self.producer.flush()
