@@ -68,10 +68,10 @@ class GoldPollingService:
 
             except Exception:
                 logger.exception("Polling error")
-                await self.producer.flush()  # <--- ĐÃ THÊM AWAIT Ở ĐÂY
+                await self.producer.flush()  
             await asyncio.sleep(settings.POLL_INTERVAL)
 
-        await self.producer.flush()          # <--- ĐÃ THÊM AWAIT Ở ĐÂY
+        await self.producer.flush()
         logger.info("Stopping service, flushing producer...")
         logger.info("GoldPollingService stopped")
 
