@@ -6,7 +6,7 @@ class Settings:
     POLL_INTERVAL = int(os.getenv("POLL_INTERVAL", "3600"))
     API_URL = os.getenv(
         "API_URL",
-        "https://sjc.com.vn/GoldPrice/Services/PriceService.ashx"
+        "https://edge-cf-api.pnj.io/ecom-frontend/v3/get-gold-price"
     )
 
 settings = Settings()

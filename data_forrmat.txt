@@ -1,0 +1,287 @@
+{
+  "updated_text": "Giá vàng ngày:  08/05/2026 09:02:08",
+  "locations": [
+    {
+      "name": "TPHCM",
+      "gold_type": [
+        {
+          "name": "PNJ",
+          "gia_ban": "167.300",
+          "gia_mua": "164.300",
+          "updated_at": "08/05/2026 08:52:32",
+          "note": "",
+          "color_note": "#003468"
+        },
+        {
+          "name": "SJC",
+          "gia_ban": "167.500",
+          "gia_mua": "164.500",
+          "updated_at": "08/05/2026 08:00:00",
+          "note": "",
+          "color_note": "#13191f"
+        }
+      ]
+    },
+    {
+      "name": "Hà Nội",
+      "gold_type": [
+        {
+          "name": "PNJ",
+          "gia_ban": "167.300",
+          "gia_mua": "164.300",
+          "updated_at": "08/05/2026 08:52:32",
+          "note": "",
+          "color_note": "#003468"
+        },
+        {
+          "name": "SJC",
+          "gia_ban": "167.500",
+          "gia_mua": "164.500",
+          "updated_at": "08/05/2026 08:00:00",
+          "note": "",
+          "color_note": "#003468"
+        }
+      ]
+    },
+    {
+      "name": "Đà Nẵng",
+      "gold_type": [
+        {
+          "name": "PNJ",
+          "gia_ban": "167.300",
+          "gia_mua": "164.300",
+          "updated_at": "08/05/2026 08:52:32",
+          "note": "",
+          "color_note": "#003468"
+        },
+        {
+          "name": "SJC",
+          "gia_ban": "167.500",
+          "gia_mua": "164.500",
+          "updated_at": "08/05/2026 08:00:00",
+          "note": "",
+          "color_note": "#003468"
+        }
+      ]
+    },
+    {
+      "name": "Miền Tây",
+      "gold_type": [
+        {
+          "name": "PNJ",
+          "gia_ban": "167.300",
+          "gia_mua": "164.300",
+          "updated_at": "08/05/2026 08:52:32",
+          "note": "",
+          "color_note": "#003468"
+        },
+        {
+          "name": "SJC",
+          "gia_ban": "167.500",
+          "gia_mua": "164.500",
+          "updated_at": "08/05/2026 08:00:00",
+          "note": "",
+          "color_note": "#003468"
+        }
+      ]
+    },
+    {
+      "name": "Tây Nguyên",
+      "gold_type": [
+        {
+          "name": "PNJ",
+          "gia_ban": "167.300",
+          "gia_mua": "164.300",
+          "updated_at": "08/05/2026 08:52:32",
+          "note": "",
+          "color_note": "#003468"
+        },
+        {
+          "name": "SJC",
+          "gia_ban": "167.500",
+          "gia_mua": "164.500",
+          "updated_at": "08/05/2026 08:00:00",
+          "note": "",
+          "color_note": "#003468"
+        }
+      ]
+    },
+    {
+      "name": "Đông Nam Bộ",
+      "gold_type": [
+        {
+          "name": "PNJ",
+          "gia_ban": "167.300",
+          "gia_mua": "164.300",
+          "updated_at": "08/05/2026 08:52:32",
+          "note": "",
+          "color_note": "#003468"
+        },
+        {
+          "name": "SJC",
+          "gia_ban": "167.500",
+          "gia_mua": "164.500",
+          "updated_at": "08/05/2026 08:00:00",
+          "note": "",
+          "color_note": "#003468"
+        }
+      ]
+    },
+    {
+      "name": "Giá vàng nữ trang",
+      "gold_type": [
+        {
+          "name": "Nhẫn Trơn PNJ 999.9",
+          "gia_ban": "167.300",
+          "gia_mua": "164.300",
+          "updated_at": "08/05/2026 08:52:32",
+          "note": "",
+          "color_note": "#003468"
+        },
+        {
+          "name": "Vàng Kim Bảo 999.9",
+          "gia_ban": "167.300",
+          "gia_mua": "164.300",
+          "updated_at": "08/05/2026 08:52:32",
+          "note": "",
+          "color_note": "#003468"
+        },
+        {
+          "name": "Vàng Phúc Lộc Tài 999.9",
+          "gia_ban": "167.300",
+          "gia_mua": "164.300",
+          "updated_at": "08/05/2026 08:52:32",
+          "note": "",
+          "color_note": "#003468"
+        },
+        {
+          "name": "Vàng nữ trang 999.9",
+          "gia_ban": "165.600",
+          "gia_mua": "161.600",
+          "updated_at": "08/05/2026 08:00:00",
+          "note": "",
+          "color_note": "#003468"
+        },
+        {
+          "name": "Vàng nữ trang 999",
+          "gia_ban": "165.430",
+          "gia_mua": "161.430",
+          "updated_at": "08/05/2026 08:00:00",
+          "note": "",
+          "color_note": "#003468"
+        },
+        {
+          "name": "Vàng nữ trang 9920",
+          "gia_ban": "164.280",
+          "gia_mua": "158.080",
+          "updated_at": "08/05/2026 08:00:00",
+          "note": "",
+          "color_note": "#003468"
+        },
+        {
+          "name": "Vàng nữ trang 99",
+          "gia_ban": "163.940",
+          "gia_mua": "157.740",
+          "updated_at": "08/05/2026 08:00:00",
+          "note": "",
+          "color_note": "#003468"
+        },
+        {
+          "name": "Vàng 916 (22K)",
+          "gia_ban": "151.690",
+          "gia_mua": "145.490",
+          "updated_at": "08/05/2026 08:00:00",
+          "note": "",
+          "color_note": "#003468"
+        },
+        {
+          "name": "Vàng 750 (18K)",
+          "gia_ban": "124.200",
+          "gia_mua": "115.300",
+          "updated_at": "08/05/2026 08:00:00",
+          "note": "",
+          "color_note": "#003468"
+        },
+        {
+          "name": "Vàng 680 (16.3K)",
+          "gia_ban": "112.610",
+          "gia_mua": "103.710",
+          "updated_at": "08/05/2026 08:00:00",
+          "note": "",
+          "color_note": "#003468"
+        },
+        {
+          "name": "Vàng 650 (15.6K)",
+          "gia_ban": "107.640",
+          "gia_mua": "98.740",
+          "updated_at": "08/05/2026 08:00:00",
+          "note": "",
+          "color_note": "#003468"
+        },
+        {
+          "name": "Vàng 610 (14.6K)",
+          "gia_ban": "101.020",
+          "gia_mua": "92.120",
+          "updated_at": "08/05/2026 08:00:00",
+          "note": "",
+          "color_note": "#003468"
+        },
+        {
+          "name": "Vàng 585 (14K)",
+          "gia_ban": "96.880",
+          "gia_mua": "87.980",
+          "updated_at": "08/05/2026 08:00:00",
+          "note": "",
+          "color_note": "#003468"
+        },
+        {
+          "name": "Vàng 416 (10K)",
+          "gia_ban": "68.890",
+          "gia_mua": "59.990",
+          "updated_at": "08/05/2026 08:00:00",
+          "note": "",
+          "color_note": "#003468"
+        },
+        {
+          "name": "Vàng 375 (9K)",
+          "gia_ban": "62.100",
+          "gia_mua": "53.200",
+          "updated_at": "08/05/2026 08:00:00",
+          "note": "",
+          "color_note": "#003468"
+        },
+        {
+          "name": "Vàng 333 (8K)",
+          "gia_ban": "55.140",
+          "gia_mua": "46.240",
+          "updated_at": "08/05/2026 08:00:00",
+          "note": "",
+          "color_note": "#003468"
+        }
+      ]
+    },
+    {
+      "name": "Giá vàng nguyên liệu mua ngoài",
+      "gold_type": [
+        {
+          "name": "99.99",
+          "gia_ban": "",
+          "gia_mua": "154.230",
+          "updated_at": "08/05/2026 09:02:08",
+          "note": "(*)",
+          "color_note": "#003468"
+        },
+        {
+          "name": "99",
+          "gia_ban": "",
+          "gia_mua": "150.450",
+          "updated_at": "08/05/2026 09:02:08",
+          "note": "(*)",
+          "color_note": "#003468"
+        }
+      ]
+    }
+  ],
+  "note": "(*) Áp dụng cho các trang sức ngoài PNJ. Áp dụng cho các Cửa hàng có thu mua nguyên liệu theo nhu cầu của PNJ. Giá mua vào của các tuổi vàng khác được quy đổi theo tỷ lệ từ tuổi vàng 99.99 (liên hệ tư vấn viên để được tư vấn thêm)",
+  "color_note": "#003468"
+}

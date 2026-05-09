@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field, field_validator
 from typing import Optional
 from datetime import datetime
 
-class SJCRecord(BaseModel):
+class PNJRecord(BaseModel):
     fetched_at: str
     latestDate: str
     Id: int
@@ -17,5 +17,17 @@ class SJCRecord(BaseModel):
     @classmethod
     def clean_currency(cls, v):
         if isinstance(v, str):
-            return float(v.replace(",", ""))
+            if not v.strip():
+                return 0.0
+            return float(v.replace(".", ""))
+            # return float(v.replace(",", ""))
+
         return v
+
+
+
+# fetched_at
+# Id
+# latestDate: "updated_at" of SJC
+# TypeName: Vàng SJC 1 lượng / lấy name bên trong gold_type
+# BranchName: name bên trong location/ "Hồ Chí Minh"

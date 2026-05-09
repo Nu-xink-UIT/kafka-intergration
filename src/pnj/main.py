@@ -1,10 +1,10 @@
 import asyncio
 import signal
 
-from sjc.client.sjc_client import GoldPriceClient
-from sjc.core.config import settings
-from sjc.core.kafka_producer import KafkaProducerClient
-from sjc.service.polling import GoldPollingService
+from client.pnj_client import GoldPriceClient
+from core.config import settings
+from core.kafka_producer import KafkaProducerClient
+from service.polling import GoldPollingService
 
 
 async def main():
