@@ -17,7 +17,7 @@ class GoldPriceClient:
             'Origin': 'https://sjc.com.vn',
             'Referer': 'https://sjc.com.vn'
         }
-async def fetch(self) -> dict:
+    async def fetch(self) -> dict:
         # 1. Lấy địa chỉ Proxy SOCKS5 từ biến môi trường (hoặc dùng mặc định 4000)
         proxy_url = os.getenv("HTTP_PROXY", "socks5://127.0.0.1:4000")
 
