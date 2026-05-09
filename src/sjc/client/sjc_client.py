@@ -16,7 +16,7 @@ class GoldPriceClient:
         }
 
     async def fetch(self) -> dict:
-        proxy_url = os.getenv("HTTP_PROXY", "socks5h://127.0.0.1:4000")
+        proxy_url = os.getenv("HTTP_PROXY", "socks5://127.0.0.1:4000")
 
         connector = ProxyConnector.from_url(proxy_url)
 
