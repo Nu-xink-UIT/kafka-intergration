@@ -2,31 +2,38 @@ import aiohttp
 import ssl
 import certifi
 import os
-from aiohttp_socks import ProxyConnector #
+from aiohttp_socks import ProxyConnector
 
 class GoldPriceClient:
     def __init__(self, url: str):
         self.url = url
         self.ssl_context = ssl.create_default_context(cafile=certifi.where())
         self.header = {
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
             'Accept': 'application/json, text/plain, */*',
+            'Accept-Language': 'vi-VN,vi;q=0.9,en-US;q=0.8,en;q=0.7',
+            'Accept-Encoding': 'gzip, deflate, br',
             'Origin': 'https://sjc.com.vn',
-            'Referer': 'https://sjc.com.vn'
+            'Referer': 'https://sjc.com.vn/',
+            'Connection': 'keep-alive',
         }
 
     async def fetch(self) -> dict:
         proxy_url = os.getenv("HTTP_PROXY", "socks5://127.0.0.1:4000")
-
         connector = ProxyConnector.from_url(proxy_url, rdns=True)
 
         async with aiohttp.ClientSession(headers=self.header, connector=connector) as session:
             try:
-                await session.get("https://sjc.com.vn", ssl=self.ssl_context, timeout=10)
+                async with session.get("https://sjc.com.vn", ssl=self.ssl_context, timeout=15) as priming_resp:
+                    await priming_resp.text()
             except Exception as e:
                 print(f"Lỗi khi mồi cookie: {e}")
 
-            async with session.get(self.url, ssl=self.ssl_context) as response:
+            async with session.get(self.url, ssl=self.ssl_context, timeout=20) as response:
+                if response.status == 403:
+                    error_text = await response.text()
+                    print(f"Nội dung phản hồi: {error_text[:200]}")
+
                 response.raise_for_status()
                 return await response.json(content_type=None)
 
