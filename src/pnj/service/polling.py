@@ -26,9 +26,6 @@ class GoldPollingService:
             try:
                 response = await self.client.fetch()
                 logger.info(f"Response {response}")
-                if not response.get("success"):
-                    logger.warning("API returned success=False")
-                    continue
 
                 locations = response.get('locations', []) # locations here is a list
                 if not locations:
