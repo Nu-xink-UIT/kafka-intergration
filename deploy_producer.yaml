@@ -28,6 +28,8 @@ spec:
       labels:
         app: sjc-producer
     spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
       terminationGracePeriodSeconds: 30
       imagePullSecrets:
         - name: github-registry-secret
@@ -40,3 +42,7 @@ spec:
               value: "kafka-cluster-kafka-bootstrap:9092"
             - name: KAFKA_TOPIC
               value: "sjc.raw"
+            - name: HTTP_PROXY
+              value: "socks5://127.0.0.1:4000"
+            - name: HTTPS_PROXY
+              value: "socks5://127.0.0.1:4000"
