@@ -15,10 +15,11 @@ class GoldPriceClient:
         logger.info(f"Begin to fetch data from: {url}")
         try:
             headers = {
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Accept': 'application/json, text/plain, */*',
-            'Origin': 'https://goldprice.org',
-            'Referer': 'https://goldprice.org/'
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+                'Accept': 'application/json, text/plain, */*',
+                'Origin': 'https://goldprice.org',
+                'Referer': 'https://goldprice.org/',
+                'Connection': 'keep-alive',
             }
             async with aiohttp.ClientSession(headers=headers) as session:
                 async with session.get(url, ssl=self.ssl_context, timeout=15) as response:
