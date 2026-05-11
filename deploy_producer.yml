@@ -27,8 +27,8 @@ spec:
     metadata:
       labels:
         app: goldprice-producer
-spec:
-      hostNetwork: true              
+    spec:
+      hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
       terminationGracePeriodSeconds: 30
       imagePullSecrets:
