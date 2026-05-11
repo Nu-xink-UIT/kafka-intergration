@@ -1,3 +1,5 @@
+from wsgiref import headers
+
 import aiohttp
 import ssl
 import certifi
@@ -22,11 +24,17 @@ class GoldPriceClient:
                 'Connection': 'keep-alive',
             }
             async with aiohttp.ClientSession(headers=headers) as session:
+                # Bước mồi: Truy cập trang chủ trước để nhận session/cookie
+                try:
+                    await session.get("https://goldprice.org", ssl=self.ssl_context, timeout=5)
+                except: pass
+
+                # Gọi API chính thức
                 async with session.get(url, ssl=self.ssl_context, timeout=15) as response:
+                    if response.status == 502:
+                        logger.warning(f"Server Goldprice quá tải (502) tại {url}")
                     response.raise_for_status()
-                    data = await response.json(content_type=None)
-                    logger.info("Successfully fetched data")
-                    return data
+                    return await response.json(content_type=None)
         except aiohttp.ClientError as e:
             logger.error(f"Connection error when calling API: {e}")
             raise

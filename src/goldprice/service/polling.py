@@ -14,12 +14,18 @@ class GoldPricePollingService:
         self.running = False
 
     async def _fetch_rates(self, curr, topic):
+        """Xử lý lấy dữ liệu cho một mã tiền tệ cụ thể"""
         async with self.gate:
             url = f"{settings.URL_RATES_BASE}{curr}"
-            data = await self.client.fetch(url)
+
+            try:
+                data = await self.client.fetch(url)
+            except Exception as e:
+                logger.error(f"Lỗi kết nối hoặc API khi lấy {curr}: {e}")
+                return False
 
             if not data or not data.get("items"):
-                logger.warning(f"Currency code: {curr} - API returned empty list")
+                logger.warning(f"Mã {curr}: API trả về danh sách trống hoặc lỗi định dạng")
                 return False
             try:
                 items_data = data.get('items')[0]
@@ -30,41 +36,47 @@ class GoldPricePollingService:
                     "tsj": data.get("tsj"),
                     "date": data.get("date"),
                     **items_data
-                    }
-                # Force data into schema for validation
+                }
+
                 validated_payload = GoldPriceRecord(**raw_payload)
-                # model_dump() transform object Pydantic into dictionary for Kafka
                 final_payload = validated_payload.model_dump()
+
                 await self.producer.send(topic=topic, key=curr, value=final_payload)
                 return True
             except Exception as e:
-                logger.error(f"Schema validation failed for {curr}: {e}")
+                logger.error(f"Lỗi xác thực Schema hoặc gửi Kafka cho {curr}: {e}")
                 return False
 
     async def poll_rates(self, currencies: list, interval: int):
+        """Vòng lặp chính thực hiện lấy dữ liệu định kỳ"""
         while self.running:
-            logger.info(f"Process {len(currencies)} currency codes: {currencies}")
+            logger.info(f"Bắt đầu chu kỳ lấy dữ liệu cho {len(currencies)} mã: {currencies}")
+
             tasks = [self._fetch_rates(curr, settings.TOPIC_RATES) for curr in currencies]
-            results = await asyncio.gather(*tasks)
 
-            success_count = sum(1 for r in results if r)
-            fail_count = len(currencies) - success_count
+            results = await asyncio.gather(*tasks, return_exceptions=True)
 
-            if fail_count > 0:
-                logger.error(f"{fail_count} code failed out of {len(currencies)}")
+            success_count = sum(1 for r in results if r is True)
+
+            if success_count == len(currencies):
+                logger.info(f"Hoàn thành chu kỳ: Thành công 100% ({success_count}/{len(currencies)})")
             else:
-                logger.info(f"Successfully polled {len(currencies)} codes")
+                logger.warning(f"Hoàn thành chu kỳ: Chỉ thành công {success_count}/{len(currencies)}")
+
             await asyncio.sleep(interval)
 
     async def start(self):
+        """Khởi chạy dịch vụ"""
         self.running = True
-        logger.info("Starting Gold Polling Service")
-        await asyncio.gather(
-            self.poll_rates(settings.CURRENCIES, settings.INTERVAL_REALTIME),
-        )
+        logger.info("Gold Polling Service đã khởi động (Chế độ chống sập)")
+        try:
+            await self.poll_rates(settings.CURRENCIES, settings.INTERVAL_REALTIME)
+        except Exception as e:
+            logger.critical(f"Lỗi nghiêm trọng không thể phục hồi trong Service: {e}")
+        finally:
+            self.running = False
 
     def stop(self):
-        logger.info("Stop Polling Service")
+        """Dừng dịch vụ"""
+        logger.info("Đang phát lệnh dừng Polling Service...")
         self.running = False
-
-
