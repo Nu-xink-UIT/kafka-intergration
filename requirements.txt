@@ -5,3 +5,4 @@ aiosignal
 pytz
 pydantic
 aiohttp-socks>=0.9.3
+curl_cffi>=0.7.1

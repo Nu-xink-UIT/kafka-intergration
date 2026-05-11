@@ -41,7 +41,7 @@ spec:
               value: "kafka-cluster-kafka-bootstrap:9092"
             - name: TOPIC_RATES
               value: "goldprice.raw"
-            - name: HTTP_PROXY
-              value: "socks5://127.0.0.1:4000"
-            - name: HTTPS_PROXY
-              value: "socks5://127.0.0.1:4000"
+            # - name: HTTP_PROXY
+            #   value: "socks5://127.0.0.1:4000"
+            # - name: HTTPS_PROXY
+            #   value: "socks5://127.0.0.1:4000"
