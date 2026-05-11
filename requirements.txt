@@ -4,3 +4,4 @@ certifi
 aiosignal
 pytz
 pydantic
+aiohttp-socks>=0.9.3
