@@ -21,8 +21,8 @@ Click the links below to navigate to the source code and deployment manifests of
 | **SJC (Domestic Gold)** | REST API / JSON | `sjc.raw` | [🔗 View Branch: `sjc`](https://github.com/Nu-xink-UIT/kafka-integration/tree/sjc) |
 | **Goldprice (Global Gold)** | REST API / JSON | `goldprice.raw` | [🔗 View Branch: `goldprice`](https://github.com/Nu-xink-UIT/kafka-integration/tree/goldprice) |
 | **Binance (Crypto Gold)** | WebSockets / Stream | `binance.raw` | [🔗 View Branch: `binance`](https://github.com/Nu-xink-UIT/kafka-integration/tree/binance) |
-| **VCB (Foreign Exchange Rate)** | REST API / JSON | `vcb_exchange_rate` | [🔗 View Branch: `source4`](https://github.com/Nu-xink-UIT/kafka-integration/tree/vcb) |
-| **PNJ (Alternative local source)** | REST API / JSON | `pnj.raw` | [🔗 View Branch: `source5`](https://github.com/Nu-xink-UIT/kafka-integration/tree/pnj) |
+| **VCB (Foreign Exchange Rate)** | REST API / JSON | `vcb_exchange_rate` | [🔗 View Branch: `vcb`](https://github.com/Nu-xink-UIT/kafka-integration/tree/vcb) |
+| **PNJ (Alternative local source)** | REST API / JSON | `pnj.raw` | [🔗 View Branch: `pnj`](https://github.com/Nu-xink-UIT/kafka-integration/tree/pnj) |
 
 ---
 
